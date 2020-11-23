@@ -212,7 +212,7 @@ export default class TestShow extends React.Component {
     data.append('items', List); */
     this.setState({ loading: true });
 
-    axios.post('http://nestjs-backend-dnd.herokuapp.com/templates/add', {
+    axios.post('https://nestjs-backend-dnd.herokuapp.com/templates/add', {
       name: this.state.nomtemplate,
       items: List
     })

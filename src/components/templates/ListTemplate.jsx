@@ -36,7 +36,7 @@ export default function Home() {
 
   let history = useHistory();
 
-  const url = "http://nestjs-backend-dnd.herokuapp.com/templates/all"
+  const url = "https://nestjs-backend-dnd.herokuapp.com/templates/all"
   const [templates, setTemplates] = useState([]);
   const [load, setLoad] = useState(false);
   const [error, setError] = useState('');
