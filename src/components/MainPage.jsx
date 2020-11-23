@@ -90,7 +90,7 @@ const MyDrawer = withStyles(styles)(
           <ListItem
             button
             component={Link}
-            to="/"
+            to="/DnDWeviooReact/"
             onClick={onItemClick("Dashboard")}
           >
             <ListItemIcon>
@@ -102,7 +102,7 @@ const MyDrawer = withStyles(styles)(
           <ListItem
             button
             component={Link}
-            to="/template"
+            to="/DnDWeviooReact/template"
             onClick={onItemClick("Modèles")}
           >
               <ListItemIcon>
@@ -113,7 +113,7 @@ const MyDrawer = withStyles(styles)(
           
           <ListItem  button
             component={Link}
-            to="/drafts" onClick={onItemClick("Brouillons")}>
+            to="/DnDWeviooReact/drafts" onClick={onItemClick("Brouillons")}>
               <ListItemIcon>
             <FileCopyIcon />
             </ListItemIcon>
@@ -122,7 +122,7 @@ const MyDrawer = withStyles(styles)(
 
           <ListItem  button
             component={Link}
-            to="/list" onClick={onItemClick("list")}>
+            to="/DnDWeviooReact/list" onClick={onItemClick("list")}>
               <ListItemIcon>
             <FileCopyIcon />
             </ListItemIcon>
@@ -134,10 +134,10 @@ const MyDrawer = withStyles(styles)(
     
         <Container maxWidth="lg" className={classes.container}>
         
-        <Route exact path="/" component={Dashboard} />
-        <Route path="/template" component={Template} />
-        <Route path="/drafts" component={Drafts} />
-        <Route path="/list" component={ListTemplate} />
+        <Route exact path="/DnDWeviooReact/" component={Dashboard} />
+        <Route path="/DnDWeviooReact/template" component={Template} />
+        <Route path="/DnDWeviooReact/drafts" component={Drafts} />
+        <Route path="/DnDWeviooReact/list" component={ListTemplate} />
         </Container>
       </main>
     </Router>

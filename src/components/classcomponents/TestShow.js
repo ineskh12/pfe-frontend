@@ -220,7 +220,7 @@ export default class TestShow extends React.Component {
         this.setState({ loading: false });
         
         setTimeout(() => {
-          this.setState({ redirect: "/list" });
+          this.setState({ redirect: "/DnDWeviooReact/list" });
         }, 1300);
 
       }).catch(error => {
