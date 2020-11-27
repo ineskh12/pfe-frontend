@@ -58,13 +58,19 @@ export default class TestShow extends React.Component {
       if (document.getElementById('' + this.state.layout[i].i)) {
         var searchEles = document.getElementById('' + this.state.layout[i].i).children;
 
-
+          
         for (var j = 0; j < searchEles.length; j++) {
+           if( searchEles[j].name === 'link')
+           {List[i] = Object.assign({ text: searchEles[j].value, color:'blue',decoration: 'underline',italics:true,	fontSize: 10}, List[i]);
 
-          List[i] = Object.assign({ text: searchEles[j].value }, List[i]);
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           } else{
 
-          Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
+            List[i] = Object.assign({ text: searchEles[j].value}, List[i]);
 
+           Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
+           }
+          
         }
       }
     }
@@ -93,10 +99,12 @@ export default class TestShow extends React.Component {
     }
     console.log('myArray');
     console.log(myArray);
-    const pageOrientation1 = 'landscape';
+    const pageOrientation1 = 'portrait';
+
     const documentDefinition = {
       pageSize: 'A4',
       pageOrientation: pageOrientation1,
+      alignment: 'center', 
       content: myArray,
 
     }
@@ -156,7 +164,7 @@ export default class TestShow extends React.Component {
 
       myArray.push(renameKey(this.state.savelist[m], "text", 'text'));
     }
-    const pageOrientation1 = 'landscape';
+    const pageOrientation1 = 'portrait';
     var today = new Date(),
       date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     const fileName = this.state.nomtemplate + '-' + date + 'V' + this.state.count;
@@ -165,7 +173,13 @@ export default class TestShow extends React.Component {
     const documentDefinition = {
       pageSize: 'A4',
       pageOrientation: pageOrientation1,
+      
       content: myArray
+      
+
+
+
+
     };
 
     pdfMake.createPdf(documentDefinition).download(fileName);
@@ -234,7 +248,11 @@ export default class TestShow extends React.Component {
 
 
   }
-
+annuler=()=>{
+ 
+  this.setState({ redirect: "/DnDWeviooReact/list" });
+  
+  }
 
 
   render() {
@@ -267,13 +285,25 @@ export default class TestShow extends React.Component {
               /></Grid> </Grid></Form>
         <div style={{ display: "flex" }}>
 
+          
+        <Button style={{ marginLeft: "auto" }}
+            variant="contained"
+            color="primary"
+            aria-label="add"
+            onClick={this.annuler}
+
+          >
+            Annuler
+          </Button>
           <Button color="primary"
             variant="contained"
-            style={{ marginLeft: "auto" }}
+            style={{ marginLeft: " 5px " }}
             onClick={this.exportPdfClick}
           >
             <PictureAsPdfIcon />
           </Button>
+         
+         
           <Button style={{ marginLeft: "5px" }}
             variant="contained"
             color="primary"
@@ -282,6 +312,7 @@ export default class TestShow extends React.Component {
           >
             <OpenInBrowserIcon />
           </Button>
+        
           <Button style={{ marginLeft: "5px" }}
             variant="contained"
             color="primary"
@@ -291,6 +322,7 @@ export default class TestShow extends React.Component {
           >
             <SaveIcon />
           </Button>
+       
 
         </div>
 

@@ -15,7 +15,7 @@ import "./Home.css";
 import { useHistory } from "react-router-dom";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-
+import Container from '@material-ui/core/Container';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -28,13 +28,16 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
     outline: 'none'
+  },container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
 }));
 
 export default function Home() {
   const classes = useStyles();
 
-  let history = useHistory();
+ 
 
   const url = "https://nestjs-backend-dnd.herokuapp.com/templates/all"
   const [templates, setTemplates] = useState([]);
@@ -53,7 +56,7 @@ export default function Home() {
 
   /*   setOpen(false);
   }; */
-
+  const history = useHistory();
   useEffect(() => {
     axios.get(url)
       .then(res => {
@@ -70,6 +73,7 @@ export default function Home() {
     return (
 
       <div className="container">
+        
         {error ? <>
           <Snackbar open={true} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
             <Alert severity="error">
@@ -78,9 +82,11 @@ export default function Home() {
           </Snackbar>
 
         </> :
-
+    
 
           templates.map((template, index) =>
+          <Container maxWidth="lg" className={classes.container}>
+        
             <Card key={index} className="box" variant="outlined" >
               <CardActionArea>
 
@@ -98,14 +104,13 @@ export default function Home() {
               </CardActionArea>
               <CardActions >
 
-                <Button size="small" color="primary" style={{outline: 'none'}} onClick={() => history.push('/template/view')} >
-                  Détails
+                <Button size="small" color="primary" style={{outline: 'none'}} onClick={() => history.push('/DnDWeviooReact/details')} > Détails
                 </Button>
                 <IconButton aria-label="delete" color="primary" style={{ marginLeft: 90 }}  >
                   <DeleteIcon />
                 </IconButton>
 
-                <IconButton aria-label="edit" color="primary" style={{ marginLeft: -5 }} onClick={() => history.push('/template/edit/')} >
+                <IconButton aria-label="edit" color="primary" style={{ marginLeft: -5 }} onClick={() => history.push('/DnDWeviooReact/edit')} >
 
                   <EditIcon />
                 </IconButton>
@@ -114,10 +119,12 @@ export default function Home() {
 
               </CardActions>
             </Card>
+            </Container>
           )
 
 
         }
+        
       </div>
     );
   } else {

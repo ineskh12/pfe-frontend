@@ -1,7 +1,7 @@
 import React from "react";
 
 const EditTemplate = () => {
-  return <div>This is the template page</div>;
+  return <div>This kljlkhjlke</div>;
 };
 
 export default EditTemplate;

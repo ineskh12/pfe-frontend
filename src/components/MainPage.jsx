@@ -21,6 +21,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ListTemplate from '../components/templates/ListTemplate';
+import Detailstemplate from  '../components/templates/Detailstemplate';
+import EditTemplate from '../components/templates/EditTemplate';
+
 const drawerWidth = 240;
 const history = createBrowserHistory();
 
@@ -138,6 +141,8 @@ const MyDrawer = withStyles(styles)(
         <Route path="/DnDWeviooReact/template" component={Template} />
         <Route path="/DnDWeviooReact/drafts" component={Drafts} />
         <Route path="/DnDWeviooReact/list" component={ListTemplate} />
+        <Route path="/DnDWeviooReact/details" component={Detailstemplate} />
+        <Route path="/DnDWeviooReact/edit" component={EditTemplate} />
         </Container>
       </main>
     </Router>
@@ -146,7 +151,7 @@ const MyDrawer = withStyles(styles)(
 
 function MainPage({ classes, variant }) {
   const [drawer, setDrawer] = useState(false);
-  const [title, setTitle] = useState();
+  const [title, setTitle] = useState("Dashboard");
 
   const toggleDrawer = () => {
     setDrawer(!drawer);

@@ -4,13 +4,16 @@ import { Responsive, WidthProvider } from "react-grid-layout";
 import Droppable from "./Droppable";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+
+//import AutorenewIcon from '@material-ui/icons/Autorenew';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
 
 
 const droppableStyle1 = {
-
+  
+ isResizable: true,
   fontsize: '24px',
   textAlign: 'left',
   position: 'absolute',
@@ -26,15 +29,18 @@ const droppableStyle1 = {
 
  class ShowcaseLayout extends React.Component {
   static defaultProps = {
+    isResizable: true,
     className: "layout",
     cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-    rowHeight: 100
+    onLayoutChange: function() {},
+    rowHeight: 30
   };
 
   constructor(props) {
     super();
-
+    
     this.state = {
+      
       items: [0, 1, 2, 3].map(function (i, key, list) {
         return {
           i: i.toString(),
@@ -48,12 +54,21 @@ const droppableStyle1 = {
       newCounter: 4,
 
       layouts: [],
+      
+  
+      
     };
+    this.baseState = this.state.items ;
+    
 
    
     this.onAddItem = this.onAddItem.bind(this);
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
   }
+
+  onNewLayout = () => {
+    this.setState(this.baseState)
+  };
 
 
   createElement(el) {
@@ -70,7 +85,7 @@ const droppableStyle1 = {
     return (
       <div key={i} data-grid={el}>
 
-        <Droppable id={i} ref={i + 'item'} style={droppableStyle1} fluid>
+        <Droppable id={i} ref={i + 'item'} style={droppableStyle1} fluid> 
 
 
 
@@ -137,11 +152,17 @@ const droppableStyle1 = {
     return (
       <div >
     
-<Fab size="small" color="secondary" aria-label="add"  >
+
+<div style={{ display: "flex" }}>
+<Fab size="small" color="primary" aria-label="add"  >
 <AddIcon onClick={this.onAddItem}  />
+
 </Fab>
 
-        <div >
+ 
+</div>
+
+        <div>
 
           <br></br>
           <ResponsiveReactGridLayout
