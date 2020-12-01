@@ -67,8 +67,10 @@ export default class TestShow extends React.Component {
            } else{
 
             List[i] = Object.assign({ text: searchEles[j].value}, List[i]);
-
+             
            Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
+           
+           console.log('value',Values)
            }
           
         }
@@ -77,6 +79,7 @@ export default class TestShow extends React.Component {
     this.setState({ savelist: [] });
 
     List.forEach(element => {
+    
       this.state.savelist.push(element);
     });
 
@@ -241,7 +244,7 @@ export default class TestShow extends React.Component {
         alert('erreur : ' + error)
       });
 
-    console.log(List);
+    console.log('list',List);
 
     //alert(JSON.stringify(this.state.savedata))
 
