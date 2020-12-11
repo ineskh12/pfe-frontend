@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import TestShow from "../classcomponents/TestShow";
-import  Draggable  from '../classcomponents/Draggable';
+import  Testdragable  from '../classcomponents/Testdragable';
 import  Droppable  from '../classcomponents/Droppable';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +54,7 @@ const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
               <Droppable id="dr1">
 
 
-                <Draggable/>
+                <Testdragable/>
 
               </Droppable>
               </Paper>
