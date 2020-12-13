@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home() {
+export default function ListTemplate() {
   const classes = useStyles();
 
  

@@ -139,11 +139,11 @@ const MyDrawer = withStyles(styles)(
         <Container maxWidth="lg" className={classes.container}>
         
         <Route exact path="/DnDWeviooReact/" component={Dashboard} />
-        <Route exact path="/DnDWeviooReact/template" component={Template} />
-        <Route  exact path="/DnDWeviooReact/drafts" component={Drafts} />
-        <Route exact path="/DnDWeviooReact/list" component={ListTemplate} />
-        <Route  exact path="/DnDWeviooReact/details" component={Detailstemplate} />
-        <Route exact path="/DnDWeviooReact/edit" component={EditTemplate} />
+        <Route  path="/DnDWeviooReact/template" component={Template} />
+        <Route   path="/DnDWeviooReact/drafts" component={Drafts} />
+        <Route  path="/DnDWeviooReact/list" component={ListTemplate} />
+        <Route   path="/DnDWeviooReact/details" component={Detailstemplate} />
+        <Route  path="/DnDWeviooReact/edit" component={EditTemplate} />
         </Container>
       </main>
     </Router>
@@ -177,4 +177,4 @@ function MainPage({ classes, variant }) {
   );
 }
 
-export default withStyles(styles)(MainPage,MyDrawer);
+export default withStyles(styles)(MainPage);

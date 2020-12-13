@@ -5,7 +5,7 @@ import Droppable from "./Droppable";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-//import AutorenewIcon from '@material-ui/icons/Autorenew';
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
@@ -85,7 +85,7 @@ const droppableStyle1 = {
     return (
       <div key={i} data-grid={el}>
 
-        <Droppable id={i} ref={i + 'item'} style={droppableStyle1} fluid> 
+        <Droppable   style={droppableStyle1} id={i} ref={i + 'item'} fluid> 
 
 
 
