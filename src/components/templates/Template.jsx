@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import TestShow from "../classcomponents/TestShow";
 import  Testdragable  from '../classcomponents/Testdragable';
 import  Droppable  from '../classcomponents/Droppable';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -50,7 +51,7 @@ const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
        <Grid container spacing={3}>
     
        <Grid item xs={12} >
-              <Paper  style={{ height: 100}}>
+              <Paper  >
               <Droppable id="dr1">
 
 

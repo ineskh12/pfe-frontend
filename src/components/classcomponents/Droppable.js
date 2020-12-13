@@ -6,6 +6,13 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertFromRaw } from "draft-js";
 import  "./toolbar.css"
 
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import LinkIcon from '@material-ui/icons/Link';
+import UndoIcon from '@material-ui/icons/Undo';
+import RedoIcon from '@material-ui/icons/Redo';
+
 const content = {
     entityMap: {},
     blocks: [
@@ -44,7 +51,7 @@ export default class Droppable extends React.Component {
          e.dataTransfer.setData("gridId", id);
     }
 
-    editor = (
+    editor_H = (
       
         <Editor
       
@@ -60,9 +67,9 @@ export default class Droppable extends React.Component {
                 blockType: {
                     inDropdown: true,
                     options: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'],
-                    className: undefined,
-                    component: undefined,
-                    dropdownClassName: undefined,
+                    dropdownClassName:'demo-dropdown-custom',
+                    
+                   
                 }
             }}
             onContentStateChange={this.onContentStateChange}
@@ -70,18 +77,104 @@ export default class Droppable extends React.Component {
        
     )
 
+    editor_T = (
+      
+        <Editor
+      
+           
+            placeholder="écrivez le texte ici ..."
+            spellCheck
+            toolbarOnFocus
+            
+             wrapperClassName="demo-wrapper"
+              editorClassName="demo-editor-custom"
+            toolbarClassName=" toolbar-position"
+            toolbar={{
+             options: ['inline','fontSize', 'history'],
+             dropdownClassName: 'demo-dropdown-custom', 
+            inline: {
+              inDropdown: true,
+              dropdownClassName:'demo-dropdown-custom', 
+             options: ['bold', 'italic', 'underline'],
+             bold: { FormatBoldIcon,className: 'demo-option-custom' },
+             italic: { FormatItalicIcon, className: 'demo-option-custom' },
+              underline: { FormatUnderlinedIcon, className: 'demo-option-custom'},
+    
+    
+                 },
+                 fontSize: {
+                    dropdownClassName:'demo-dropdown-custom',
+                options: [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96],
+                className: 'demo-option-custom-medium'
+            },
+            history: {
+                      undo: {  UndoIcon  },
+                      redo: {  RedoIcon },
+                      }
+
+            }}
+            onContentStateChange={this.onContentStateChange}
+        />
+       
+    )
+    
+    editor_L = (
+      
+        <Editor
+      
+           
+            placeholder="écrivez le texte ici ..."
+            spellCheck
+            toolbarOnFocus
+            wrapperClassName="wrapper-class"
+            editorClassName="editor-class"
+            toolbarClassName="toolbar-class toolbar-position"
+            toolbar={{
+                options: ['link'],
+                link: {
+                        inDropdown: false,
+                        
+                          showOpenOptionOnHover: true,
+                        defaultTargetOption: '_self',
+                          options: ['link'],
+                         link: { LinkIcon},
+                        
+                    
+                    }
+            }}
+            onContentStateChange={this.onContentStateChange}
+        />
+       
+    )
+
+
+   
     drop = (id, e) => {
         e.preventDefault();
         const data = e.dataTransfer.getData('transfer');
         
-        if (e.dataTransfer.getData("gridId") === 'dr1') {
-            ReactDOM.render(this.editor, document.getElementById(e.target.id));
+        if (e.dataTransfer.getData("transfer") === 'item1') {
+            ReactDOM.render(this.editor_H, document.getElementById(e.target.id));
             /* var nodeCopy = document.getElementById(data).cloneNode(true);
             var x = randHex(12);
             nodeCopy.id = x;
             e.target.appendChild(nodeCopy); */
             e.dataTransfer.clearData();
-        } else if ( e.dataTransfer.getData("gridId") !== 'dr1' && e.dataTransfer.getData("gridId").trim() !== id.toString()) {
+        }else if (e.dataTransfer.getData("transfer") === 'item2') {
+            ReactDOM.render(this.editor_T, document.getElementById(e.target.id));
+            /* var nodeCopy = document.getElementById(data).cloneNode(true);
+            var x = randHex(12);
+            nodeCopy.id = x;
+            e.target.appendChild(nodeCopy); */
+            e.dataTransfer.clearData();
+        } else if (e.dataTransfer.getData("transfer") === 'item3') {
+            ReactDOM.render(this.editor_L, document.getElementById(e.target.id));
+            /* var nodeCopy = document.getElementById(data).cloneNode(true);
+            var x = randHex(12);
+            nodeCopy.id = x;
+            e.target.appendChild(nodeCopy); */
+            e.dataTransfer.clearData();
+        }  else if ( e.dataTransfer.getData("gridId") !== 'dr1' && e.dataTransfer.getData("gridId").trim() !== id.toString()) {
             var nodeMove = document.getElementById(data)
             var y = randHex(12);
             nodeMove.id = y;
