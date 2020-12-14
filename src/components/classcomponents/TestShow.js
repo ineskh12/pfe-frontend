@@ -13,6 +13,8 @@ import { Redirect } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Form from "@material-ui/core/FormControl";
 import TextField from '@material-ui/core/TextField';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 export default class TestShow extends React.Component {
 
 
@@ -57,11 +59,40 @@ export default class TestShow extends React.Component {
 
       if (document.getElementById('' + this.state.layout[i].i)) {
         var searchEles = document.getElementById('' + this.state.layout[i].i).children;
-
-          
+        console.log(searchEles);
+        
         for (var j = 0; j < searchEles.length; j++) {
+          
            if( searchEles[j].name === 'link')
            {List[i] = Object.assign({ text: searchEles[j].value, color:'blue',decoration: 'underline',italics:true,	fontSize: 10}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           } else if (searchEles[j].innerHTML.search('Normal') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,	fontSize: 10}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           } else if (searchEles[j].innerHTML.search('H1') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:24, bold:true, marginBottom:5}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           }  else if (searchEles[j].innerHTML.search('H2') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:22, bold:true, marginBottom:5}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           }  else if (searchEles[j].innerHTML.search('H3') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:20, bold:true, marginBottom:5}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           }  else if (searchEles[j].innerHTML.search('H4') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:18, bold:true, marginBottom:5}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           }  else if (searchEles[j].innerHTML.search('H5') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:16, bold:true, marginBottom:5}, List[i]);
+
+           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+           }  else if (searchEles[j].innerHTML.search('H6') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:14, bold:true, marginBottom:5}, List[i]);
 
            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
            } else{
