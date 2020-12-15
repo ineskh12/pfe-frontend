@@ -20,6 +20,7 @@
     "draft-js-inline-toolbar-plugin": "^3.0.1",
     "draft-js-plugins-editor": "^3.0.0",
     "gh-pages-deploy": "^0.5.1",
+    "node-sass": "^4.0.0",
     "pdfmake": "^0.1.68",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

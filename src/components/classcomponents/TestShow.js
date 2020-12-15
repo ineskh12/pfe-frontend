@@ -13,8 +13,13 @@ import { Redirect } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Form from "@material-ui/core/FormControl";
 import TextField from '@material-ui/core/TextField';
-import { Editor } from "react-draft-wysiwyg";
+import { ContentState, EditorState, convertToRaw, convertFromHTML } from 'draft-js';
+//import {convertFromHTML} from 'draft-convert'
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+
+
+
 export default class TestShow extends React.Component {
 
 
@@ -41,7 +46,6 @@ export default class TestShow extends React.Component {
 
   onLayoutChange(layout) {
     this.setState({ layout: layout });
-
   }
 
 
@@ -60,57 +64,86 @@ export default class TestShow extends React.Component {
       if (document.getElementById('' + this.state.layout[i].i)) {
         var searchEles = document.getElementById('' + this.state.layout[i].i).children;
         console.log(searchEles);
-        
+
         for (var j = 0; j < searchEles.length; j++) {
           
-           if( searchEles[j].name === 'link')
-           {List[i] = Object.assign({ text: searchEles[j].value, color:'blue',decoration: 'underline',italics:true,	fontSize: 10}, List[i]);
+          console.log(searchEles[j].outerHTML);
+          const blocksFromHtml = convertFromHTML(searchEles[j].outerHTML);
+          const state = ContentState.createFromBlockArray(
+            blocksFromHtml.contentBlocks,
+            blocksFromHtml.entityMap,
+          );
 
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           } else if (searchEles[j].innerHTML.search('Normal') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,	fontSize: 10}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           } else if (searchEles[j].innerHTML.search('H1') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:24, bold:true, marginBottom:5}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           }  else if (searchEles[j].innerHTML.search('H2') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:22, bold:true, marginBottom:5}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           }  else if (searchEles[j].innerHTML.search('H3') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:20, bold:true, marginBottom:5}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           }  else if (searchEles[j].innerHTML.search('H4') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:18, bold:true, marginBottom:5}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           }  else if (searchEles[j].innerHTML.search('H5') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:16, bold:true, marginBottom:5}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           }  else if (searchEles[j].innerHTML.search('H6') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText,fontSize:14, bold:true, marginBottom:5}, List[i]);
-
-           Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-           } else{
-
-            List[i] = Object.assign({ text: searchEles[j].value}, List[i]);
-             
-           Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
-           
-           console.log('value',Values)
-           }
+          const editorState = EditorState.createWithContent(
+            state
+          );
+          const content = editorState.getCurrentContent();
+          console.log(convertToRaw(content));
+          const row = convertToRaw(content);  
           
+            /* for (let i = 0; i < row.blocks.length; i++) {
+              const element = row.blocks[i];
+              for (let j = 0; j < element.length; j++) {
+                const inlinestyle = element[j];
+
+                if(inlinestyle.style === 'ITALIC'){
+
+                }else if(inlinestyle.style === 'BOLD'){
+                  List[i] = Object.assign({ bold: true }, List[i]);
+                }
+
+              }
+            } */
+
+          //console.log(blocksFromHtml);
+          if (searchEles[j].name === 'link') {
+            List[i] = Object.assign({ text: searchEles[j].value, color: 'blue', decoration: 'underline', italics: true, fontSize: 10 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('Normal') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 10 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('H1') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 24, bold: true, marginBottom: 5 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('H2') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 22, bold: true, marginBottom: 5 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('H3') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 20, bold: true, marginBottom: 5 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('H4') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 18, bold: true, marginBottom: 5 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('H5') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 16, bold: true, marginBottom: 5 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else if (searchEles[j].innerHTML.search('H6') !== -1) {
+            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 14, bold: true, marginBottom: 5 }, List[i]);
+
+            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
+          } else {
+
+            List[i] = Object.assign({ text: searchEles[j].value }, List[i]);
+
+            Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
+
+            console.log('value', Values)
+          }
+
         }
       }
     }
     this.setState({ savelist: [] });
 
     List.forEach(element => {
-    
+
       this.state.savelist.push(element);
     });
 
@@ -138,7 +171,7 @@ export default class TestShow extends React.Component {
     const documentDefinition = {
       pageSize: 'A4',
       pageOrientation: pageOrientation1,
-      alignment: 'center', 
+      alignment: 'center',
       content: myArray,
 
     }
@@ -207,9 +240,9 @@ export default class TestShow extends React.Component {
     const documentDefinition = {
       pageSize: 'A4',
       pageOrientation: pageOrientation1,
-      
+
       content: myArray
-      
+
 
 
 
@@ -266,7 +299,7 @@ export default class TestShow extends React.Component {
     })
       .then(res => {
         this.setState({ loading: false });
-        
+
         setTimeout(() => {
           this.setState({ redirect: "/DnDWeviooReact/list" });
         }, 1300);
@@ -275,17 +308,17 @@ export default class TestShow extends React.Component {
         alert('erreur : ' + error)
       });
 
-    console.log('list',List);
+    console.log('list', List);
 
     //alert(JSON.stringify(this.state.savedata))
 
 
 
   }
-annuler=()=>{
- 
-  this.setState({ redirect: "/DnDWeviooReact/list" });
-  
+  annuler = () => {
+
+    this.setState({ redirect: "/DnDWeviooReact/list" });
+
   }
 
 
@@ -319,8 +352,8 @@ annuler=()=>{
               /></Grid> </Grid></Form>
         <div style={{ display: "flex" }}>
 
-          
-        <Button style={{ marginLeft: "auto" }}
+
+          <Button style={{ marginLeft: "auto" }}
             variant="contained"
             color="primary"
             aria-label="add"
@@ -336,8 +369,8 @@ annuler=()=>{
           >
             <PictureAsPdfIcon />
           </Button>
-         
-         
+
+
           <Button style={{ marginLeft: "5px" }}
             variant="contained"
             color="primary"
@@ -346,7 +379,7 @@ annuler=()=>{
           >
             <OpenInBrowserIcon />
           </Button>
-        
+
           <Button style={{ marginLeft: "5px" }}
             variant="contained"
             color="primary"
@@ -356,7 +389,7 @@ annuler=()=>{
           >
             <SaveIcon />
           </Button>
-       
+
 
         </div>
 

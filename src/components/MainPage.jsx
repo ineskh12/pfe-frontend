@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from "react";
 import clsx from "clsx";
+import Button from '@material-ui/core/Button';
 import { Router, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { withStyles } from "@material-ui/core/styles";
@@ -16,7 +17,7 @@ import Container from '@material-ui/core/Container';
 import Dashboard from "./Dashboard";
 import Template from "../components/templates/Template";
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import Drafts from "../components/templates/Drafts";
+
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -33,6 +34,8 @@ const styles = theme => ({
   },
   flex: {
     flex: 1
+  },  link: {
+    margin: theme.spacing(1, 1.5),
   },
   drawerPaper: {
     position: "relative",
@@ -54,7 +57,7 @@ const styles = theme => ({
 
 const MyToolbar = withStyles(styles)(({ classes, title, onMenuClick }) => (
   <Fragment>
-    <AppBar className={classes.aboveDrawer}>
+    <AppBar color="default" className={classes.aboveDrawer}>
       <Toolbar>
         <IconButton
           className={classes.menuButton}
@@ -67,7 +70,11 @@ const MyToolbar = withStyles(styles)(({ classes, title, onMenuClick }) => (
         <Typography variant="h6" color="inherit" className={classes.flex}>
           {title}
         </Typography>
+        <Button href="/DnDWeviooReact/loginregister" color="black" variant="outlined" className={classes.link}>
+            se déconnecter
+          </Button>
       </Toolbar>
+    
     </AppBar>
     <div className={classes.toolbarMargin} />
   </Fragment>
@@ -94,7 +101,7 @@ const MyDrawer = withStyles(styles)(
           <ListItem
             button
             component={Link}
-            to="/DnDWeviooReact/"
+            to="/DnDWeviooReact/dashboard"
             onClick={onItemClick("Dashboard")}
           >
             <ListItemIcon>
@@ -115,14 +122,7 @@ const MyDrawer = withStyles(styles)(
             <ListItemText primary="Modèles">Modèles</ListItemText>
           </ListItem>
           
-          <ListItem  button
-            component={Link}
-            to="/DnDWeviooReact/drafts" onClick={onItemClick("Brouillons")}>
-              <ListItemIcon>
-            <FileCopyIcon />
-            </ListItemIcon>
-        <ListItemText primary="Brouillons">Brouillons</ListItemText>
-          </ListItem>
+         
 
           <ListItem  button
             component={Link}
@@ -135,12 +135,12 @@ const MyDrawer = withStyles(styles)(
         </List>
       </Drawer>
       <main className={classes.content}>
-    
+
         <Container maxWidth="lg" className={classes.container}>
-        
-        <Route exact path="/DnDWeviooReact/" component={Dashboard} />
+     
+        <Route exact path="/DnDWeviooReact/dashboard" component={Dashboard} />
         <Route  path="/DnDWeviooReact/template" component={Template} />
-        <Route   path="/DnDWeviooReact/drafts" component={Drafts} />
+    
         <Route  path="/DnDWeviooReact/list" component={ListTemplate} />
         <Route   path="/DnDWeviooReact/details" component={Detailstemplate} />
         <Route  path="/DnDWeviooReact/edit" component={EditTemplate} />
@@ -177,4 +177,4 @@ function MainPage({ classes, variant }) {
   );
 }
 
-export default withStyles(styles)(MainPage);
+export default withStyles(styles)(MainPage,MyDrawer);

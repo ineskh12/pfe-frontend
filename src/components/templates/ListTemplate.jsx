@@ -68,11 +68,11 @@ export default function ListTemplate() {
         setLoad(true)
       })
   }, []);
-
+ 
   if (load) {
     return (
-
-      <div className="container">
+<div> 
+<div className="container">
         
         {error ? <>
           <Snackbar open={true} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
@@ -86,7 +86,7 @@ export default function ListTemplate() {
 
           templates.map((template, index) =>
           <Container maxWidth="lg" className={classes.container}>
-        
+      
             <Card key={index} className="box" variant="outlined" >
               <CardActionArea>
 
@@ -126,6 +126,8 @@ export default function ListTemplate() {
         }
         
       </div>
+</div>
+    
     );
   } else {
 
