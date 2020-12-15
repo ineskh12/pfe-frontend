@@ -50,7 +50,7 @@ export class Login extends React.Component {
         <div className="footer">
           
           <button type="button" className="btn">
-          <a href="/DnDWeviooReact/main"  style={{color: 'white'}}> se connecter</a>
+          <a href="https://ineskh12.github.io/DnDWeviooReact/main"  style={{color: 'white'}}> se connecter</a>
           </button>
         
         </div>

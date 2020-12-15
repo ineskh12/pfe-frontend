@@ -59,7 +59,7 @@ export class Register extends React.Component {
         <div className="footer">
       
           <button type="button" className="btn">
-          <a href="/DnDWeviooReact/main" style={{color: 'white'}}> S'inscrire</a>
+          <a href="https://ineskh12.github.io/DnDWeviooReact/main" style={{color: 'white'}}> S'inscrire</a>
          
           </button>
         </div>
