@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, EditorState, convertFromRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { stateToHTML } from "draft-js-export-html";
 import "./toolbar.css"
 
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
