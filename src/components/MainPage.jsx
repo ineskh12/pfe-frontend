@@ -56,6 +56,7 @@ const styles = theme => ({
 });
 
 const MyToolbar = withStyles(styles)(({ classes, title, onMenuClick }) => (
+  
   <Fragment>
     <AppBar color="default" className={classes.aboveDrawer}>
       <Toolbar>

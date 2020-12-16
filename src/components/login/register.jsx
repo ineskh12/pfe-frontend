@@ -1,7 +1,7 @@
 import React from "react";
 import loginImg from "./Wevioo.png";
 import Link from '@material-ui/core/Link';
-
+import { Redirect } from "react-router-dom";
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
@@ -22,14 +22,21 @@ function Copyright() {
 
 export class Register extends React.Component {
  
- /*  constructor(props) {
-    super(props);
-   
-  } */
+  constructor(props) {
 
+    super(props);
+  this.state={redirect: null}}
+  annuler = () => {
+
+    this.setState({ redirect: "/DnDWeviooReact/main" });
+
+  }
   
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">S'inscrire</div>
@@ -58,9 +65,9 @@ export class Register extends React.Component {
         </div>
         <div className="footer">
       
-          <button type="button" className="btn">
-          <a href="https://ineskh12.github.io/DnDWeviooReact/main" style={{color: 'white'}}> S'inscrire</a>
          
+          <button type="button" className="btn"   onClick={this.annuler} >
+          S'inscrire
           </button>
         </div>
         <Box mt={1}>

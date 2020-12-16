@@ -3,7 +3,9 @@ import loginImg from "./Wevioo.png";
 import Link from '@material-ui/core/Link';
 
 import Box from '@material-ui/core/Box';
+import { Redirect } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -16,12 +18,21 @@ function Copyright() {
     </Typography>
   );
 }
+
 export class Login extends React.Component {
- /*  constructor(props) {
+  constructor(props) {
+
     super(props);
+  this.state={redirect: null}}
+  annuler = () => {
+
+    this.setState({ redirect: "/DnDWeviooReact/main" });
+
   }
- */
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Se connecter</div>
@@ -48,9 +59,8 @@ export class Login extends React.Component {
         
         </div>
         <div className="footer">
-          
-          <button type="button" className="btn">
-          <a href="https://ineskh12.github.io/DnDWeviooReact/main"  style={{color: 'white'}}> se connecter</a>
+        <button type="button" className="btn"   onClick={this.annuler} >
+          se connecter
           </button>
         
         </div>

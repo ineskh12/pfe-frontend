@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Editor } from "react-draft-wysiwyg";
-import { ContentState, EditorState, convertFromRaw } from "draft-js";
+import {  convertFromRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./toolbar.css"
 

@@ -79,7 +79,7 @@ export default class TestShow extends React.Component {
           );
           const content = editorState.getCurrentContent();
           console.log(convertToRaw(content));
-          const row = convertToRaw(content);  
+         // const row = convertToRaw(content);  
           
             /* for (let i = 0; i < row.blocks.length; i++) {
               const element = row.blocks[i];
