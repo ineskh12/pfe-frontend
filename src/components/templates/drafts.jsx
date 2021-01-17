@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-export default function RecipeReviewCard() {
+export default function Dafts() {
   const classes = useStyles();
  
   /* http://localhost:3002/templates/getByUser/${id}` */
@@ -106,11 +106,7 @@ export default function RecipeReviewCard() {
       
           <Card key={template._id} className="box" variant="outlined" >
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            {template.nbreofuses}
-          </Avatar>
-        }
+        
        
         title={template.name}
         subheader={template.createdAt}
@@ -122,6 +118,7 @@ export default function RecipeReviewCard() {
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
         Mis à jour à:{template.updatedAt}
+        {template.state}
         </Typography>
       </CardContent>
       <CardActions >
@@ -136,7 +133,7 @@ export default function RecipeReviewCard() {
      
     </Card>
     </Container>
-    
+      
   )
 
 

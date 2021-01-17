@@ -32,7 +32,7 @@ export default class TestShow extends React.Component {
 
     this.state = { isToggleOn: true };
     this.state = { notify: { isOpen: false, message: '', type: '' } };
-    this.state = { layout: [], savelist: [], savedata: [], nomtemplate: '', count: 0, age: '', open: false, redirect: null, loading: false };
+    this.state = { layout: [], pdf: [], savelist: [], savedata: [], nomtemplate: '', count: 0, age: '', open: false, redirect: null, loading: false };
 
 
     this.onLayoutChange = this.onLayoutChange.bind(this);
@@ -48,97 +48,165 @@ export default class TestShow extends React.Component {
     this.setState({ layout: layout });
   }
 
-
+  onPDF(pdf) {
+    this.setState({ pdf: pdf });
+  }
 
   openPdfClick = () => {
+
+    console.log('this.state.pdf : ');
+    console.log(this.state.pdf);
+
+
     let List = [];
-    let Values = [];
 
     this.state.layout.forEach(element => {
-      List.push(Object.assign({}, { absolutePosition: { x: (element.x * 50) + 50, y: (element.y * 50) + 50 } }))
+      List.push(Object.assign({}, { absolutePosition: { x: (element.x )*50, y: (element.y)*20} ,}))
 
     });
 
     for (var i = 0; i < this.state.layout.length; i++) {
 
-      if (document.getElementById('' + this.state.layout[i].i)) {
-        var searchEles = document.getElementById('' + this.state.layout[i].i).children;
-        console.log(searchEles);
+      //for (let j = 0; j < this.state.pdf.length; j++) {
+      const j = parseInt(this.state.layout[i].i);
+      const element = this.state.pdf[j];
+      if (element.blocks) {
+        for (let p = 0; p < element.blocks.length; p++) {
+          const block = element.blocks[p];
 
-        for (var j = 0; j < searchEles.length; j++) {
-          
-          console.log(searchEles[j].outerHTML);
-          const blocksFromHtml = convertFromHTML(searchEles[j].outerHTML);
-          const state = ContentState.createFromBlockArray(
-            blocksFromHtml.contentBlocks,
-            blocksFromHtml.entityMap,
-          );
+          let text = block.text.split("");
 
-          const editorState = EditorState.createWithContent(
-            state
-          );
-          const content = editorState.getCurrentContent();
-          console.log(convertToRaw(content));
-         // const row = convertToRaw(content);  
-          
-            /* for (let i = 0; i < row.blocks.length; i++) {
-              const element = row.blocks[i];
-              for (let j = 0; j < element.length; j++) {
-                const inlinestyle = element[j];
+          if (block.type === 'unstyled') {
 
-                if(inlinestyle.style === 'ITALIC'){
+            //thats for bold , italic and fontsize
+            for (let k = 0; k < block.inlineStyleRanges.length; k++) {
+              const inlineStyleRanges = block.inlineStyleRanges[k];
 
-                }else if(inlinestyle.style === 'BOLD'){
-                  List[i] = Object.assign({ bold: true }, List[i]);
+              if (inlineStyleRanges.style === "BOLD") {
+
+                for (let pos = inlineStyleRanges.offset; pos < inlineStyleRanges.offset + inlineStyleRanges.length; pos++) {
+                  if (text[pos].text) {
+                    text[pos] = Object.assign({ bold: true }, text[pos])
+                  } else {
+                    text[pos] = { text: text[pos], bold: true }
+                  }
+
+                }
+
+              } else if (inlineStyleRanges.style === "ITALIC") {
+
+                for (let pos = inlineStyleRanges.offset; pos < inlineStyleRanges.offset + inlineStyleRanges.length; pos++) {
+                  if (text[pos].text) {
+                    text[pos] = Object.assign({ italics: true }, text[pos])
+                  } else {
+                    text[pos] = { text: text[pos], italics: true }
+                  }
+
+                }
+
+              } else if (inlineStyleRanges.style.search("fontsize") !== -1) {
+
+                for (let pos = inlineStyleRanges.offset; pos < inlineStyleRanges.offset + inlineStyleRanges.length; pos++) {
+                  if (text[pos].text) {
+                    text[pos] = Object.assign({ fontSize: parseInt(inlineStyleRanges.style.slice(9, inlineStyleRanges.style.length)) }, text[pos])
+                  } else {
+                    text[pos] = { text: text[pos], fontSize: parseInt(inlineStyleRanges.style.slice(9, inlineStyleRanges.style.length)) }
+                  }
+
                 }
 
               }
-            } */
+            }
 
-          //console.log(blocksFromHtml);
-          if (searchEles[j].name === 'link') {
-            List[i] = Object.assign({ text: searchEles[j].value, color: 'blue', decoration: 'underline', italics: true, fontSize: 10 }, List[i]);
+            //Thats for link editor draft
+            for (let t = 0; t < block.entityRanges.length; t++) {
+              const entityRanges = block.entityRanges[t];
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('Normal') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 10 }, List[i]);
+              for (let pos = entityRanges.offset; pos < entityRanges.offset + entityRanges.length; pos++) {
+                if (text[pos].text) {
+                  text[pos] = Object.assign({ link: element.entityMap[entityRanges.key].data.url }, text[pos])
+                } else {
+                  text[pos] = { text: text[pos], link: element.entityMap[entityRanges.key].data.url }
+                }
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('H1') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 24, bold: true, marginBottom: 5 }, List[i]);
+              }
+            }
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('H2') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 22, bold: true, marginBottom: 5 }, List[i]);
+            //thats for a Normal font in header , link and "bold , italic and fontsize" editors draft
+            if (p === 0) {
+              text.push("\n");
+              List[i] = Object.assign({ text: text }, List[i]);
+              console.log(List[i]);
+            } else if (p > 0) {
+              if (element.blocks[p - 1].type.slice(0, 6) === "header") {
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('H3') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 20, bold: true, marginBottom: 5 }, List[i]);
+                List[i].text.push({ text: block.text + "\n" });
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('H4') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 18, bold: true, marginBottom: 5 }, List[i]);
+              } else {
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('H5') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 16, bold: true, marginBottom: 5 }, List[i]);
+                text.push("\n");
+                List[i].text.push({ text: text });
+              }
+              console.log(List[i]);
+              console.log("here");
+              console.log(element.blocks.length);
+            }
 
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
-          } else if (searchEles[j].innerHTML.search('H6') !== -1) {
-            List[i] = Object.assign({ text: searchEles[j].innerText, fontSize: 14, bold: true, marginBottom: 5 }, List[i]);
-
-            Values.push(Object.assign({}, { link: searchEles[j].value, index: i }))
           } else {
 
-            List[i] = Object.assign({ text: searchEles[j].value }, List[i]);
+            //thats for header editor
+            if (block.type.slice(0, 6) === "header") {
+              if (block.type === "header-one") {
+                if (List[i].text) {
+                  List[i].text.push({ text: block.text + "\n", fontSize: 24, bold: true, marginBottom: 5 })
+                } else {
+                  List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 24, bold: true, marginBottom: 5 }] }, List[i]);
+                }
+              } else
+                if (block.type === "header-two") {
+                  if (List[i].text) {
+                    List[i].text.push({ text: block.text + "\n", fontSize: 22, bold: true, marginBottom: 5 })
+                  } else {
+                    List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 22, bold: true, marginBottom: 5 }] }, List[i]);
+                  }
+                } else
+                  if (block.type === "header-three") {
+                    if (List[i].text) {
+                      List[i].text.push({ text: block.text + "\n", fontSize: 20, bold: true, marginBottom: 5 })
+                    } else {
+                      List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 20, bold: true, marginBottom: 5 }] }, List[i]);
+                    }
+                  } else
+                    if (block.type === "header-four") {
+                      if (List[i].text) {
+                        List[i].text.push({ text: block.text + "\n", fontSize: 18, bold: true, marginBottom: 5 })
+                      } else {
+                        List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 18, bold: true, marginBottom: 5 }] }, List[i]);
+                      }
+                    } else
+                      if (block.type === "header-five") {
+                        if (List[i].text) {
+                          List[i].text.push({ text: block.text + "\n", fontSize: 16, bold: true, marginBottom: 5 })
+                        } else {
+                          List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 16, bold: true, marginBottom: 5 }] }, List[i]);
+                        }
+                      } else
+                        if (block.type === "header-six") {
+                          if (List[i].text) {
+                            List[i].text.push({ text: block.text + "\n", fontSize: 14, bold: true, marginBottom: 5 })
+                          } else {
+                            List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 14, bold: true, marginBottom: 5 }] }, List[i]);
+                          }
+                        }
 
-            Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
+            }
 
-            console.log('value', Values)
           }
 
         }
+
       }
+
     }
     this.setState({ savelist: [] });
 
@@ -164,8 +232,8 @@ export default class TestShow extends React.Component {
     for (var m in this.state.savelist) {
       myArray.push(renameKey(this.state.savelist[m], "text", 'text'));
     }
-    console.log('myArray');
-    console.log(myArray);
+    //console.log('myArray');
+    //console.log(myArray);
     const pageOrientation1 = 'portrait';
 
     const documentDefinition = {
@@ -178,37 +246,168 @@ export default class TestShow extends React.Component {
     pdfMake.createPdf(documentDefinition).open();
   }
 
-
   exportPdfClick = () => {
     this.setState({
       count: this.state.count + 1
     });
+    console.log('this.state.pdf : ');
+    console.log(this.state.pdf);
+
+
     let List = [];
-    let Values = [];
 
     this.state.layout.forEach(element => {
-      List.push(Object.assign({}, { absolutePosition: { x: (element.x * 50) + 50, y: (element.y * 50) + 50 } }))
+      List.push(Object.assign({}, { absolutePosition: { x: (element.x )*50, y: (element.y)*20} ,}))
 
     });
 
     for (var i = 0; i < this.state.layout.length; i++) {
 
-      if (document.getElementById('' + this.state.layout[i].i)) {
-        var searchEles = document.getElementById('' + this.state.layout[i].i).children;
+      //for (let j = 0; j < this.state.pdf.length; j++) {
+      const j = parseInt(this.state.layout[i].i);
+      const element = this.state.pdf[j];
+      if (element.blocks) {
+        for (let p = 0; p < element.blocks.length; p++) {
+          const block = element.blocks[p];
 
+          let text = block.text.split("");
 
-        for (var j = 0; j < searchEles.length; j++) {
+          if (block.type === 'unstyled') {
 
-          List[i] = Object.assign({ text: searchEles[j].value }, List[i]);
+            //thats for bold , italic and fontsize
+            for (let k = 0; k < block.inlineStyleRanges.length; k++) {
+              const inlineStyleRanges = block.inlineStyleRanges[k];
 
-          Values.push(Object.assign({}, { text: searchEles[j].value, index: i }))
+              if (inlineStyleRanges.style === "BOLD") {
+
+                for (let pos = inlineStyleRanges.offset; pos < inlineStyleRanges.offset + inlineStyleRanges.length; pos++) {
+                  if (text[pos].text) {
+                    text[pos] = Object.assign({ bold: true }, text[pos])
+                  } else {
+                    text[pos] = { text: text[pos], bold: true }
+                  }
+
+                }
+
+              } else if (inlineStyleRanges.style === "ITALIC") {
+
+                for (let pos = inlineStyleRanges.offset; pos < inlineStyleRanges.offset + inlineStyleRanges.length; pos++) {
+                  if (text[pos].text) {
+                    text[pos] = Object.assign({ italics: true }, text[pos])
+                  } else {
+                    text[pos] = { text: text[pos], italics: true }
+                  }
+
+                }
+
+              } else if (inlineStyleRanges.style.search("fontsize") !== -1) {
+
+                for (let pos = inlineStyleRanges.offset; pos < inlineStyleRanges.offset + inlineStyleRanges.length; pos++) {
+                  if (text[pos].text) {
+                    text[pos] = Object.assign({ fontSize: parseInt(inlineStyleRanges.style.slice(9, inlineStyleRanges.style.length)) }, text[pos])
+                  } else {
+                    text[pos] = { text: text[pos], fontSize: parseInt(inlineStyleRanges.style.slice(9, inlineStyleRanges.style.length)) }
+                  }
+
+                }
+
+              }
+            }
+
+            //Thats for link editor draft
+            for (let t = 0; t < block.entityRanges.length; t++) {
+              const entityRanges = block.entityRanges[t];
+
+              for (let pos = entityRanges.offset; pos < entityRanges.offset + entityRanges.length; pos++) {
+                if (text[pos].text) {
+                  text[pos] = Object.assign({ link: element.entityMap[entityRanges.key].data.url }, text[pos])
+                } else {
+                  text[pos] = { text: text[pos], link: element.entityMap[entityRanges.key].data.url }
+                }
+
+              }
+            }
+
+            //thats for a Normal font in header , link and "bold , italic and fontsize" editors draft
+            if (p === 0) {
+              text.push("\n");
+              List[i] = Object.assign({ text: text }, List[i]);
+              console.log(List[i]);
+            } else if (p > 0) {
+              if (element.blocks[p - 1].type.slice(0, 6) === "header") {
+
+                List[i].text.push({ text: block.text + "\n" });
+
+              } else {
+
+                text.push("\n");
+                List[i].text.push({ text: text });
+              }
+              console.log(List[i]);
+              console.log("here");
+              console.log(element.blocks.length);
+            }
+
+          } else {
+
+            //thats for header editor
+            if (block.type.slice(0, 6) === "header") {
+              if (block.type === "header-one") {
+                if (List[i].text) {
+                  List[i].text.push({ text: block.text + "\n", fontSize: 24, bold: true, marginBottom: 5 })
+                } else {
+                  List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 24, bold: true, marginBottom: 5 }] }, List[i]);
+                }
+              } else
+                if (block.type === "header-two") {
+                  if (List[i].text) {
+                    List[i].text.push({ text: block.text + "\n", fontSize: 22, bold: true, marginBottom: 5 })
+                  } else {
+                    List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 22, bold: true, marginBottom: 5 }] }, List[i]);
+                  }
+                } else
+                  if (block.type === "header-three") {
+                    if (List[i].text) {
+                      List[i].text.push({ text: block.text + "\n", fontSize: 20, bold: true, marginBottom: 5 })
+                    } else {
+                      List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 20, bold: true, marginBottom: 5 }] }, List[i]);
+                    }
+                  } else
+                    if (block.type === "header-four") {
+                      if (List[i].text) {
+                        List[i].text.push({ text: block.text + "\n", fontSize: 18, bold: true, marginBottom: 5 })
+                      } else {
+                        List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 18, bold: true, marginBottom: 5 }] }, List[i]);
+                      }
+                    } else
+                      if (block.type === "header-five") {
+                        if (List[i].text) {
+                          List[i].text.push({ text: block.text + "\n", fontSize: 16, bold: true, marginBottom: 5 })
+                        } else {
+                          List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 16, bold: true, marginBottom: 5 }] }, List[i]);
+                        }
+                      } else
+                        if (block.type === "header-six") {
+                          if (List[i].text) {
+                            List[i].text.push({ text: block.text + "\n", fontSize: 14, bold: true, marginBottom: 5 })
+                          } else {
+                            List[i] = Object.assign({ text: [{ text: block.text + "\n", fontSize: 14, bold: true, marginBottom: 5 }] }, List[i]);
+                          }
+                        }
+
+            }
+
+          }
 
         }
+
       }
+
     }
     this.setState({ savelist: [] });
 
     List.forEach(element => {
+
       this.state.savelist.push(element);
     });
 
@@ -217,41 +416,33 @@ export default class TestShow extends React.Component {
     pdfMake.vfs = vfs;
 
     const clone = (obj) => Object.assign({}, obj);
-
     const renameKey = (object, key, newKey) => {
-
       const clonedObj = clone(object);
       const targetKey = clonedObj[key];
       delete clonedObj[key];
       clonedObj[newKey] = targetKey;
       return clonedObj;
     };
+
     var myArray = [];
     for (var m in this.state.savelist) {
-
       myArray.push(renameKey(this.state.savelist[m], "text", 'text'));
     }
+    //console.log('myArray');
+    //console.log(myArray);
     const pageOrientation1 = 'portrait';
     var today = new Date(),
-      date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    const fileName = this.state.nomtemplate + '-' + date + 'V' + this.state.count;
-    //const filename =this.state.nomtemplate +"/"+this.state.currentDate;
-
+    date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+  const fileName = this.state.nomtemplate + '-' + date + 'V' + this.state.count;
     const documentDefinition = {
       pageSize: 'A4',
       pageOrientation: pageOrientation1,
+      alignment: 'center',
+      content: myArray,
 
-      content: myArray
-
-
-
-
-
-    };
-
+    }
+   
     pdfMake.createPdf(documentDefinition).download(fileName);
-
-
   }
 
 
@@ -400,7 +591,7 @@ export default class TestShow extends React.Component {
 
 
 
-        <ShowcaseLayout onLayoutChange={this.onLayoutChange} />
+        <ShowcaseLayout onLayoutChange={this.onLayoutChange} onPDF={this.onPDF.bind(this)} />
 
       </div>
 

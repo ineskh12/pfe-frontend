@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Editor } from "react-draft-wysiwyg";
-import {  convertFromRaw } from "draft-js";
+import { ContentState, EditorState, convertFromRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import "./toolbar.css"
 
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
@@ -40,10 +41,14 @@ export default class Droppable extends React.Component {
         };
     }
 
+
     onContentStateChange = (contentState) => {
         this.setState({
             contentState
         });
+
+        this.props.data.onChangePDF(contentState, this.props.id);
+        
         
     };
 

@@ -1,17 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import Route from "../src/App/Route.jsx";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Routelist from "./App/Routelist.jsx";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
-  <React.StrictMode>
+  
+
     <Router>
       <CssBaseline />
-      <Route />
-    </Router>
-  </React.StrictMode>,
+      
+      <Routelist />
+    
+    </Router>,
+ 
   rootElement
 );
 /* 
