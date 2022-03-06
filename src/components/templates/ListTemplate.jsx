@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+
 import Button from '@material-ui/core/Button';
 //import Base64 from '../atob';
 import { useHistory } from "react-router-dom";
@@ -54,9 +55,6 @@ function Alert(props) {
 export default function RecipeReviewCard() {
   const classes = useStyles();
  
-  /* http://localhost:3002/templates/getByUser/${id}` */
-
-  const url = "http://localhost:3002/templates/all"
   const [templates, setTemplates] = useState([]);
   const [load, setLoad] = useState(false);
   const [error, setError] = useState('');
@@ -74,7 +72,7 @@ export default function RecipeReviewCard() {
  
 
   useEffect(() => {
-    axios.get(url)
+    axios.get(`http://localhost:3002/templates/all/${localStorage.getItem('iduser')}`)
       .then(res => {
         setTemplates(res.data);
         console.log(res.data)

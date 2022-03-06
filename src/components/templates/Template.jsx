@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import TestShow from "../classcomponents/TestShow";
-import  Testdragable  from '../classcomponents/Testdragable';
+import  Draggable  from '../classcomponents/Draggable';
 import  Droppable  from '../classcomponents/Droppable';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,10 +52,11 @@ const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     
        <Grid item xs={12} >
               <Paper  >
+                
               <Droppable id="dr1">
 
 
-                <Testdragable/>
+                <Draggable/>
 
               </Droppable>
               </Paper>

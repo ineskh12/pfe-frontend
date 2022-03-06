@@ -1,79 +1,101 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Icon from '@material-ui/core/Icon';
 import TextFieldsOutlinedIcon from '@material-ui/icons/TextFieldsOutlined';
-import Typography from '@material-ui/core/Typography';
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import LinkIcon from '@material-ui/icons/Link';
+
+import { convertFromRaw } from "draft-js";
+
+import './toolbar.css';
+
+import './draggable.css';
+import { Avatar } from '@material-ui/core';
+
 const Item = {
-    color: '#55',
-    backgroundColor: 'white',
-    borderRadius: '3px',
-    margin: '8px',
-   
+  position: "absolute",
+  
+ 
+}
+const content = {
+  entityMap: {},
+  blocks: [
+    {
+      key: "637gr",
+      text: "Initialized from content state.",
+      type: "unstyled",
+      depth: 0,
+      inlineStyleRanges: [],
+      entityRanges: [],
+      data: {}
+    }
+  ]
+};
 
-    display: 'flex'
+export default class Testdragable extends React.Component {
+
+  constructor(props) {
+    super(props);
+    const contentState = convertFromRaw(content);
+    this.state = {
+      contentState
+    };
+  }
+
+  onContentStateChange = (contentState) => {
+    this.setState({
+      contentState
+    });
+  };
+
+
+
+  drag = (e) => {
+
+    e.dataTransfer.setData('transfer', e.target.id);
+
+    localStorage.setItem('myData', e.target.id);
+
+
+  }
+  noAllowDrop = (e) => {
+
+    e.stopPropagation();
+    e.dataTransfer.clearData();
+  }
+
+  render() {
+    const { contentState } = this.state;
+
+    console.log(contentState);
+    return (
+      <div className='flex-container' >
+        <div id="item1" className='row'  style={ {Item,height: 50, width: 50}}  draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop}>
+        <Icon  style={{ fontSize: 30 }} ><strong>H</strong></Icon>
+        </div>
+
+        <div id="item2" className='row' style={ {Item,height: 50, width: 50}} draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} >
+          <TextFieldsOutlinedIcon style={{ fontSize: 30 }}  />
+        </div>
+
+        <div id="item3" className='row'  style={ {Item,height: 50, width: 50}} draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} >
+        <LinkIcon style={{ fontSize: 30 }} />
+        </div>
+       
+        <Avatar aria-label="recipe" >
+        <div id="item3" className='row'  style={ {Item,height: 50, width: 50}} draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} >
+        <LinkIcon style={{ fontSize: 30 }} />
+        </div>
+          </Avatar>
+      </div>
+    );
+
+  }
 }
 
-export default class Draggable extends React.Component {
-
-
-
-
-    drag = (e) => {
-
-        e.dataTransfer.setData('transfer', e.target.id);
-        localStorage.setItem('myData', e.target.id);
-        
-
-    }
-    noAllowDrop = (e) => {
-
-        e.stopPropagation();
-        e.dataTransfer.clearData();
-    }
-
-    render() {
-        return (
-            < div style={{ flexDirection: 'column' }}>
-                <div style={{ flexDirection: 'column' }}>
-                    
-                    <ListItemIcon   >  <TextFieldsOutlinedIcon />
-                        <input style={Item} id="item1"  draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} type="text" name="name" />
-                       
-                    </ListItemIcon>
-                    <ListItemIcon   >  <Typography variant="h6">h1</Typography>
-                    
-                   <input style={Item} id="item2" draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} type="text" name="h1" />
-                    </ListItemIcon>
-
-                    <ListItemIcon   >  <Typography variant="h6">P</Typography>
-                    <input style={Item} id="item3" draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} type="text" name="p" />
-         
-                    </ListItemIcon>
-
-
-                    <ListItemIcon   >  <Typography variant="h6">Nbre</Typography>  
-                    
-                   <input style={Item} id="item4" draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} type="number" name="nbre" />
-                    </ListItemIcon>
-
-                     <ListItemIcon >  <Typography variant="h6">?</Typography>  
-                    
-                    <input style={Item} id="item5" draggable="true" onDragStart={(e) => this.drag(e)} onDragOver={this.noAllowDrop} type="text" name="link" defaultValue="?" />
-                     </ListItemIcon>
-                </div>
-             
-               
-            </div>
-        );
-
-    }
-}
-
-Draggable.protoTypes = {
-    id: PropTypes.string,
-    style: PropTypes.object,
-    children: PropTypes.node,
+Testdragable.protoTypes = {
+  id: PropTypes.string,
+  style: PropTypes.object,
+  children: PropTypes.node,
 
 }
 

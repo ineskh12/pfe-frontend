@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
-//import Base64 from '../atob';
+
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -12,7 +12,7 @@ import Container from '@material-ui/core/Container';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Avatar from '@material-ui/core/Avatar';
+
 import Typography from '@material-ui/core/Typography';
 import { blue } from '@material-ui/core/colors';
 

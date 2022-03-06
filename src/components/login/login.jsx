@@ -6,6 +6,17 @@ import Box from '@material-ui/core/Box';
 import { Redirect } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 
+
+import Base64 from '../atob';
+const parseJwt = () => {
+  var base64Url = localStorage.getItem('token').split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(Base64.atob(base64).split('').map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+   
+  return JSON.parse(jsonPayload);
+};
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -18,15 +29,18 @@ function Copyright() {
     </Typography>
   );
 }
-
+const notify= () =>{
+  alert( 'Entrez email / mot de passe'  )
+}
 export class Login extends React.Component {
   constructor(props) {
 
     super(props);
   this.state={redirect: null,email:null,pwd:null,login:false,store:null}
   this.seconnecter = this.seconnecter.bind(this);}
+  
   seconnecter = () => {
-
+    
     axios.post('http://localhost:3002/auth/login', {
    
       email:this.state.email,
@@ -34,20 +48,28 @@ export class Login extends React.Component {
       
     })
       .then((response) => {
-        
-        localStorage.setItem('login',JSON.stringify(
-          response.data.token
-        ))
-          console.log("result",response.data.token);
-       this.setState({ login: true });
+        this.setState({ login: !this.state.login });
+       
+        const token = response.data.token;
+        this.setState({ login: true });
+        localStorage.setItem('token', token);
+        localStorage.setItem('login', this.state.login);
+        localStorage.setItem('iduser', JSON.stringify(parseJwt().id).replace(/\"/g, ""));
+        localStorage.setItem('firstname', JSON.stringify(parseJwt().first_name).replace(/\"/g, ""));
+        localStorage.setItem('lastname', JSON.stringify(parseJwt().last_name).replace(/\"/g, ""));
+        localStorage.setItem('email', JSON.stringify(parseJwt().email).replace(/\"/g, ""));
+      
         setTimeout(() => {
           this.setState({ redirect: "/DnDWeviooReact/main"});
         }, 1300);
 
       }).catch(error => {
-        alert('erreur : ' + error)
+        notify()
+        //alert('erreur : ' + error)
       });
   }
+
+  
   render() {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />

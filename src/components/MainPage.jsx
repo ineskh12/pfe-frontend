@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import clsx from 'clsx';
-import Base64 from './atob';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Router, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -25,6 +25,8 @@ import ListTemplate from '../components/templates/ListTemplate';
 import Detailstemplate from  '../components/templates/Detailstemplate';
 import EditTemplate from '../components/templates/EditTemplate';
 import Drafts from './templates/drafts';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+
 const drawerWidth = 240;
 const history = createBrowserHistory();
 
@@ -48,16 +50,12 @@ const styles = theme => ({
     zIndex: theme.zIndex.drawer + 1
   }
 });
-const parseJwt = () => {
-  var base64Url = localStorage.getItem('login').split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(Base64.atob(base64).split('').map(function (c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
 
-  return JSON.parse(jsonPayload);
-};
+const seDeconnecte=()=>{
+  localStorage.clear();
+  window.location.href = "/DnDWeviooReact/"
 
+}
 const MyToolbar = withStyles(styles)(
   ({ classes, title, onMenuClick }) => (
     <Fragment>
@@ -78,7 +76,9 @@ const MyToolbar = withStyles(styles)(
           >
             {title}
           </Typography>
-          <Button   color="inherit" variant="outlined" className={classes.link}>
+          <Button   color="inherit" variant="outlined" className={classes.link} 
+        
+          onClick={seDeconnecte}> <ExitToAppIcon/>  
             se déconnecter
           </Button>
         </Toolbar>
@@ -95,6 +95,7 @@ const MyDrawer = withStyles(styles)(
                 classes={{
                   paper: classes.drawerPaper
                 }}
+               
     >
       <div
         className={clsx({
@@ -127,9 +128,19 @@ const MyDrawer = withStyles(styles)(
             </ListItemIcon>
           <ListItemText primary="Brouillons">   Brouillons </ListItemText>
         </ListItem>
+
+
+        
+        <ListItem button component={Link} to="/DnDWeviooReact/drafts" onClick={onItemClick('Brouillons2')}>
+        <ListItemIcon>
+            <PersonPinIcon />
+            </ListItemIcon>
+          <ListItemText primary="Brouillons2">   Brouillons2 </ListItemText>
+        </ListItem>
       </List>
     </Drawer>
     <main className={classes.content}>
+ 
         <Route exact path="/DnDWeviooReact/dashboard" component={Dashboard} />
         <Route path="/DnDWeviooReact/template" component={Template} />
      
@@ -137,34 +148,43 @@ const MyDrawer = withStyles(styles)(
            <Route path="/DnDWeviooReact/drafts" component={Drafts} /> 
            <Route path="/DnDWeviooReact/edit" component={EditTemplate} />
            <Route path="/DnDWeviooReact/details" component={Detailstemplate} /> 
+        
+       
     </main>
     </Router>
   )
 );
 
-function AppBarInteraction({ classes, variant }) {
-  const [drawer, setDrawer] = useState(false);
-  const [title, setTitle] = useState(JSON.stringify(parseJwt().first_name).replace(/\"/g, ""));
 
+function AppBarInteraction({ classes, variant }) {
+  const [drawer, setDrawer] = useState(true);
+
+
+  const [title, setTitle] = useState(localStorage.getItem('firstname'));
+ 
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
 
+  
   const onItemClick = title => () => {
     setTitle(title);
-    setDrawer(variant === 'temporary' ? false : drawer);
+    setDrawer(variant === 'temporary' ? true : drawer);
     setDrawer(!drawer);
   };
 
   return (
     <div className={classes.root}>
       <MyToolbar title={title} onMenuClick={toggleDrawer} />
+      
       <MyDrawer
+      
         open={drawer}
         onClose={toggleDrawer}
         onItemClick={onItemClick}
         variant={variant}
       />
+   
     </div>
   );
 }

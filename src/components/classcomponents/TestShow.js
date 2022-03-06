@@ -32,7 +32,7 @@ export default class TestShow extends React.Component {
 
     this.state = { isToggleOn: true };
     this.state = { notify: { isOpen: false, message: '', type: '' } };
-    this.state = { layout: [], pdf: [], savelist: [], savedata: [], nomtemplate: '', count: 0, age: '', open: false, redirect: null, loading: false };
+    this.state = { layout: [], pdf: [], savelist: [], savedata: [], nomtemplate: '', count: 0, age: '', open: false, redirect: null, loading: false, iduser: localStorage.getItem('iduser') };
 
 
     this.onLayoutChange = this.onLayoutChange.bind(this);
@@ -448,10 +448,10 @@ export default class TestShow extends React.Component {
 
 
   save = () => {
-    let List = [];
+    //let List = [];
 
 
-    this.state.layout.forEach(element => {
+    /* this.state.layout.forEach(element => {
 
 
       if (document.getElementById('' + element.i).children.length !== 0) {
@@ -471,22 +471,25 @@ export default class TestShow extends React.Component {
         List.push(Object.assign({}, { x: (element.x), y: (element.y), h: (element.h), w: (element.w) }))
       }
 
-    });
+    }); */
 
-    this.setState({ savedata: [] });
+    /* this.setState({ savedata: [] });
 
     List.forEach(element => {
       this.state.savedata.push(element);
-    });
+    }); */
 
     /* var data = new FormData();
     data.append('name', this.state.nomtemplate);
     data.append('items', List); */
+    
     this.setState({ loading: true });
 
-    axios.post('https://nestjs-backend-dnd.herokuapp.com/templates/add', {
+    axios.post('http://localhost:3002/templates/ajouter', {
       name: this.state.nomtemplate,
-      items: List
+      editor: this.state.pdf,
+      layout: this.state.layout,
+      userId: this.state.iduser
     })
       .then(res => {
         this.setState({ loading: false });
@@ -499,7 +502,7 @@ export default class TestShow extends React.Component {
         alert('erreur : ' + error)
       });
 
-    console.log('list', List);
+    //console.log('list', List);
 
     //alert(JSON.stringify(this.state.savedata))
 
@@ -578,6 +581,7 @@ export default class TestShow extends React.Component {
             onClick={this.save}
 
           >
+            
             <SaveIcon />
           </Button>
 
